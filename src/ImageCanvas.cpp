@@ -80,6 +80,7 @@ void ImageCanvas::drawGL() {
             transform(mReference.get()).inverse().matrix(),
             mExposure,
             mOffset,
+            mLodBias,
             mTonemap,
             mMetric
         );
@@ -91,6 +92,7 @@ void ImageCanvas::drawGL() {
             transform(mImage.get()).inverse().matrix(),
             mExposure,
             mOffset,
+            mLodBias,
             mTonemap
         );
     }

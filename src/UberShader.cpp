@@ -60,6 +60,7 @@ UberShader::UberShader()
 
         uniform float exposure;
         uniform float offset;
+        uniform float lodBias;
         uniform int tonemap;
         uniform int metric;
 
@@ -119,7 +120,7 @@ UberShader::UberShader()
             if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) {
                 return 0.0;
             }
-            return texture(sampler, imageUv).x;
+            return texture(sampler, imageUv, lodBias).x;
         }
 
         void main() {
@@ -436,10 +437,11 @@ void UberShader::draw(
     const Eigen::Matrix3f& transformReference,
     float exposure,
     float offset,
+    float lodBias,
     ETonemap tonemap,
     EMetric metric
 ) {
-    bindImageData(texturesImage, transformImage, exposure, offset, tonemap);
+    bindImageData(texturesImage, transformImage, exposure, offset, lodBias, tonemap);
     bindReferenceData(texturesReference, transformReference, metric);
     mShader.setUniform("hasReference", true);
     mShader.drawIndexed(GL_TRIANGLES, 0, 2);
@@ -450,9 +452,10 @@ void UberShader::draw(
     const Eigen::Matrix3f& transformImage,
     float exposure,
     float offset,
+    float lodBias,
     ETonemap tonemap
 ) {
-    bindImageData(texturesImage, transformImage, exposure, offset, tonemap);
+    bindImageData(texturesImage, transformImage, exposure, offset, lodBias, tonemap);
     mShader.setUniform("hasReference", false);
     mShader.drawIndexed(GL_TRIANGLES, 0, 2);
 }
@@ -483,6 +486,7 @@ void UberShader::bindImageData(
     const Eigen::Matrix3f& transformImage,
     float exposure,
     float offset,
+    float lodBias,
     ETonemap tonemap
 ) {
     for (int i = 0; i < 4; ++i) {
@@ -501,6 +505,7 @@ void UberShader::bindImageData(
 
     mShader.setUniform("exposure", exposure);
     mShader.setUniform("offset", offset);
+    mShader.setUniform("lodBias", lodBias);
     mShader.setUniform("tonemap", static_cast<int>(tonemap));
 
     glActiveTexture(GL_TEXTURE10);

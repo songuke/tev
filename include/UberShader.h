@@ -22,6 +22,7 @@ public:
         const Eigen::Matrix3f& transformReference,
         float exposure,
         float offset,
+        float lodBias,
         ETonemap tonemap,
         EMetric metric
     );
@@ -32,6 +33,7 @@ public:
         const Eigen::Matrix3f& transformImage,
         float exposure,
         float offset,
+        float lodBias,
         ETonemap tonemap
     );
 
@@ -42,6 +44,7 @@ private:
         const Eigen::Matrix3f& transformImage,
         float exposure,
         float offset,
+        float lodBias,
         ETonemap tonemap
     );
 

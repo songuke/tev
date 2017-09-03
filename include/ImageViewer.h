@@ -56,6 +56,12 @@ public:
 
     void setOffset(float value);
 
+    float lodBias() {
+        return mLodBiasSlider->value();
+    }
+
+    void setLodBias(float value);
+
     void normalizeExposureAndOffset();
     void resetImage();
 
@@ -111,6 +117,9 @@ private:
 
     nanogui::Label* mOffsetLabel;
     nanogui::Slider* mOffsetSlider;
+
+    nanogui::Label* mLodBiasLabel;
+    nanogui::Slider* mLodBiasSlider;
 
     nanogui::Widget* mTonemapButtonContainer;
     nanogui::Widget* mMetricButtonContainer;

@@ -85,9 +85,25 @@ ImageViewer::ImageViewer()
             "The offset is added to the image after exposure has been applied.\n"
             "Keyboard shortcut: O or Shift+O"
         );
+
+        panel = new Widget{sidebarLayout};
+        panel->setLayout(new BoxLayout{Orientation::Vertical, Alignment::Fill, 5});
+
+        mLodBiasLabel = new Label{panel, "", "sans-bold", 15};
+
+        mLodBiasSlider = new Slider{panel};
+        mLodBiasSlider->setRange({0.0f, 10.0f});
+        mLodBiasSlider->setCallback([this](float value) {
+            setLodBias(value);
+        });
+        setLodBias(0);
+        mLodBiasSlider->setTooltip(
+            "The LoD bias controls how much blur is added via mip mapping. It is useful for blurring away noise.\n"
+            "Keyboard shortcut: L or Shift+L"
+        );
     }
 
-    // Exposure/offset buttons
+    // Image option buttons
     {
         auto buttonContainer = new Widget{sidebarLayout};
         buttonContainer->setLayout(new GridLayout{Orientation::Horizontal, 2, Alignment::Fill, 5, 2});
@@ -660,6 +676,14 @@ void ImageViewer::setOffset(float value) {
     mOffsetLabel->setCaption(tfm::format("Offset: %+.2f", value));
 
     mImageCanvas->setOffset(value);
+}
+
+void ImageViewer::setLodBias(float value) {
+    value = round(value, 1.0f);
+    mLodBiasSlider->setValue(value);
+    mLodBiasLabel->setCaption(tfm::format("LoD Bias: %+.1f", value));
+
+    mImageCanvas->setLodBias(value);
 }
 
 void ImageViewer::normalizeExposureAndOffset() {

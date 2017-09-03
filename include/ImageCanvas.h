@@ -34,6 +34,10 @@ public:
         mOffset = offset;
     }
 
+    void setLodBias(float offset) {
+        mLodBias = offset;
+    }
+
     void setImage(std::shared_ptr<Image> image) {
         mImage = image;
     }
@@ -87,6 +91,7 @@ private:
     float mPixelRatio = 1;
     float mExposure = 0;
     float mOffset = 0;
+    float mLodBias = 0;
     std::shared_ptr<Image> mImage;
     std::shared_ptr<Image> mReference;
 
