@@ -105,7 +105,14 @@ UberShader::UberShader()
                 case GAMMA:       return pow(col, vec3(1.0 / gamma));
                 // Here grayscale is compressed such that the darkest color is is 1/1024th as bright as the brightest color.
                 case FALSE_COLOR: return falseColor(log2(average(col)) / 10.0 + 0.5);
-                case POS_NEG:     return vec3(-average(min(col, vec3(0.0))) * 2.0, average(max(col, vec3(0.0))) * 2.0, 0.0);
+                case POS_NEG:
+                {
+                  float pn = col.r + col.g + col.b;
+                  float norm = sqrt(col.r * col.r + col.g * col.g + col.b * col.b);
+                  float r = float(pn < 0.0f) * norm;
+                  float g = float(pn > 0.0f) * norm;
+                  return vec3(sRGB(r), sRGB(g), 0.0f);
+                }                
             }
             return vec3(0.0);
         }

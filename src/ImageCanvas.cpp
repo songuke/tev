@@ -317,7 +317,11 @@ Vector3f ImageCanvas::applyTonemap(const Vector3f& value, float gamma, ETonemap 
             }
         case ETonemap::PositiveNegative:
             {
-                result = {-2.0f * value.cwiseMin(Vector3f::Zero()).mean(), 2.0f * value.cwiseMax(Vector3f::Zero()).mean(), 0.0f};
+                float pn = value.x() + value.y() + value.z();
+                float norm = value.norm();
+                float r = (pn < 0.0f) ? norm : 0.0f;
+                float g = (pn > 0.0f) ? norm : 0.0f;
+                result = {toSRGB(r), toSRGB(g), 0.0f};
                 break;
             }
         default:
